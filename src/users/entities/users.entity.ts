@@ -1,10 +1,14 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { IsNotEmpty, IsDate, IsEmail, IsArray, IsEnum, IsJSON } from 'class-validator'
+import { IsNotEmpty, IsDate, IsEmail, IsEnum } from 'class-validator'
+import { UserGender, UserRole } from "./users.enum";
 
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
     id: number
+
+    @PrimaryGeneratedColumn('uuid')
+    uuid: string
 
     @Column({unique:true})
     @IsNotEmpty()
@@ -13,14 +17,15 @@ export class User {
     @Column({length: 200})
     staff_name: string
 
-    @Column()
+    @Column({unique:true})
     @IsEmail()
     staff_email: string;
 
-    @Column()
+    @Column({unique:true})
     staff_id: string
 
     @Column()
+    @IsEnum(UserGender)
     gender: string
 
     @Column()
@@ -33,6 +38,7 @@ export class User {
     avatar: string;
 
     @Column()
+    @IsEnum(UserRole)
     role: string
 
     @Column()
