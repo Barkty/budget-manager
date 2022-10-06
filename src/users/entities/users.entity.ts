@@ -10,8 +10,7 @@ export class User {
     @PrimaryGeneratedColumn('uuid')
     uuid: string
 
-    @Column({unique:true})
-    @IsNotEmpty()
+    @Column({nullable: true})
     username:string;
 
     @Column({length: 200})
@@ -34,20 +33,20 @@ export class User {
     @Column('text')
     pass_word: string
 
-    @Column('text')
+    @Column({type: 'text', nullable: true})
     avatar: string;
 
     @Column()
     @IsEnum(UserRole)
     role: string
 
-    @Column()
+    @Column({nullable: true})
     @IsDate()
-    last_loginAt?:Date;
+    last_loginAt?: Date;
 
     @CreateDateColumn()
-    createAt:Date;
+    createAt: Date;
 
     @UpdateDateColumn()
-    updateAt:Date;
+    updateAt: Date;
 }
