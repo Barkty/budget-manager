@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { IsNotEmpty, IsDate, IsEmail, IsEnum } from 'class-validator'
+import { AfterInsert, AfterRemove, AfterUpdate, Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { IsDate, IsEmail, IsEnum, IsNumber } from 'class-validator'
 import { UserGender, UserRole } from "./users.enum";
 
 @Entity()
@@ -41,12 +41,34 @@ export class User {
     role: string
 
     @Column({nullable: true})
+    @IsNumber()
+    otp: number
+
+    @Column({nullable: true})
+    @IsDate()
+    otpExpiresIn: Date
+
+    @Column({nullable: true})
     @IsDate()
     last_loginAt?: Date;
 
     @CreateDateColumn()
-    createAt: Date;
+    create_time: Date;
 
     @UpdateDateColumn()
-    updateAt: Date;
+    updated_time: Date;
+
+    @AfterInsert()
+    logInsert() {
+        console.log(`Inserted user with id: ${this.id}`)
+    }
+
+    @AfterRemove()
+    logRemove() {
+        console.log(`Removed user with id: ${this.id}`)
+    }
+    @AfterUpdate()
+    logUpdate() {
+        console.log(`Updated user with id: ${this.id}`)
+    }
 }
