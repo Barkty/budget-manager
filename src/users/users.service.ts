@@ -33,18 +33,32 @@ export class UsersService {
   }
 
   removeOne = async (id: number) => {
-    const user = await this.repo.delete({id: id})
+    const user = await this.findOne(id)
 
-    return user
+    if(!user) {
+      throw new Error('User does not exist')
+    }
+
+
+    return await this.repo.remove(user)
+    
   }
 
-  updateOne = async (id: number, updates: UpdateProfileDTO) => {
+  updateOne = async (id: number, updates: Partial<User>) => {
 
     try {
         
-        const user = await this.repo.update(id, {avatar: updates.avatar, department: updates.department, gender: updates.gender, username: updates.username})
+      // const user = await this.repo.update(id, {avatar: updates.avatar, department: updates.department, gender: updates.gender, username: updates.username})
+      const user = await this.findOne(id)
 
-        return user
+      if(!user) {
+        throw new Error('User does not exist')
+      }
+
+      Object.assign(user, updates)
+
+      return await this.repo.save(user)
+
     } catch (error) {
 
         throw error

@@ -9,13 +9,26 @@ export class UsersController {
 
   @Post('/new')
   async createUser( @Body() body: CreateUserDTO, res: Response) {
+
+    const found = await this.userService.findEmail(body.staff_email)
+
+    if(found) {
+
+      // res.status(200).json({
+      //   message: 'An account already existes with this email',
+      //   success: 0
+      // })
+      throw new Error('An account already existes with this email')
+
+    }
     const user = await this.userService.create(body)
 
-    res.status(200).json({
-      message: 'User created successfully',
-      data: user,
-      success: 1
-    })
+    // res.status(200).json({
+    //   message: 'User created successfully',
+    //   data: user,
+    //   success: 1
+    // })
+
   }
 
   @Get('/all')
