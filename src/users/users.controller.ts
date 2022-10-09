@@ -1,56 +1,69 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Patch, NotFoundException, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDTO, UpdateProfileDTO } from './dto/user.dto';
-import { Response } from 'express';
+import { SerializeInterceptor } from 'interceptors/serialize.interceptor';
 
 @Controller('/api/users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Post('/new')
-  async createUser( @Body() body: CreateUserDTO, res: Response) {
+  async createUser( @Body() body: CreateUserDTO ) {
 
     const found = await this.userService.findEmail(body.staff_email)
 
     if(found) {
 
-      // res.status(200).json({
-      //   message: 'An account already existes with this email',
-      //   success: 0
-      // })
       throw new Error('An account already existes with this email')
 
     }
     const user = await this.userService.create(body)
 
-    // res.status(200).json({
-    //   message: 'User created successfully',
-    //   data: user,
-    //   success: 1
-    // })
+    return user;
 
   }
 
   @Get('/all')
   async getUsers() {
     const users = await this.userService.findAll()
-    console.log(users)
 
     return users
   }
 
+  @UseInterceptors(SerializeInterceptor)
   @Get('/:id')
-  getUser( @Param('id') id: string ) {
-    this.userService.findOne(Number(id))
+  async getUser( @Param('id') id: string ) {
+
+    const user = await this.userService.findOne(Number(id))
+
+    if(!user) {
+      throw new NotFoundException('User does not exists')
+    }
+
+    return user;
   }
 
   @Delete('/:id')
-  deleteUser( @Param('id') id: string) {
-    this.userService.removeOne(Number(id))
+  async deleteUser( @Param('id') id: string) {
+
+    const user = await this.userService.removeOne(Number(id))
+
+    if(!user) {
+      throw new NotFoundException('User does not exist')
+    }
+
+    return user;
   }
 
   @Patch('/update')
-  updateUser( @Param('id') id: string, @Body() body: UpdateProfileDTO ) {
-    this.userService.updateOne(Number(id), body)
+  async updateUser( @Param('id') id: string, @Body() body: UpdateProfileDTO ) {
+
+    const user = await this.userService.updateOne(Number(id), body)
+
+    if(!user) {
+      throw new NotFoundException('User does not exist')
+    }
+
+    return user;
   }
 }

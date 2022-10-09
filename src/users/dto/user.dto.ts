@@ -1,4 +1,4 @@
-import { IsDate, IsEmail, IsNumber, IsString } from "class-validator";
+import { IsDate, IsEmail, IsNumber, IsString, IsOptional } from "class-validator";
 
 export class CreateUserDTO {
 
@@ -30,27 +30,35 @@ export class CreateUserDTO {
 export class UpdateProfileDTO {
 
     @IsString()
+    @IsOptional()
     staff_name: string
 
     @IsEmail()
+    @IsOptional()
     staff_email: string;
 
     @IsString()
+    @IsOptional()
     staff_id: string
 
     @IsString()
+    @IsOptional()
     gender: string
 
     @IsString()
+    @IsOptional()
     username: string
 
     @IsString()
+    @IsOptional()
     department: string
 
     @IsString()
+    @IsOptional()
     avatar: string
 
     @IsDate()
+    @IsOptional()
     updated_time: Date
 
 }
