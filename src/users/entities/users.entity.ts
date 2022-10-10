@@ -2,6 +2,9 @@ import { AfterInsert, AfterRemove, AfterUpdate, Entity, Column, PrimaryGenerated
 import { IsDate, IsEmail, IsEnum, IsNumber } from 'class-validator'
 import { UserGender, UserRole } from "./users.enum";
 
+/**
+ * @class User Entity defines a user model
+ */
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()

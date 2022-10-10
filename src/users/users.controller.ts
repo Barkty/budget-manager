@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Param, Delete, Patch, NotFoundException, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDTO, UpdateProfileDTO } from './dto/user.dto';
-import { SerializeInterceptor } from 'interceptors/serialize.interceptor';
+import { CreateUserDTO, UpdateProfileDTO, UserDTO } from './dto/user.dto';
+import { Serialize } from 'interceptors/serialize.interceptor';
 
 @Controller('/api/users')
+@Serialize(UserDTO)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
@@ -26,11 +27,10 @@ export class UsersController {
   @Get('/all')
   async getUsers() {
     const users = await this.userService.findAll()
-
+    
     return users
   }
 
-  @UseInterceptors(SerializeInterceptor)
   @Get('/:id')
   async getUser( @Param('id') id: string ) {
 
