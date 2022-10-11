@@ -1,27 +1,28 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, NotFoundException, UseInterceptors } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDTO, UpdateProfileDTO, UserDTO } from './dto/user.dto';
-import { Serialize } from 'interceptors/serialize.interceptor';
+import { Controller, Get, Post, Body, Param, Delete, Patch, NotFoundException } from '@nestjs/common';
+import { UsersService } from './users.service.js';
+import { CreateUserDTO, UpdateProfileDTO, UserDTO } from './dto/user.dto.js';
+import { Serialize } from '../interceptors/serialize.interceptor.js';
+import { AuthService } from './auth.service.js';
 
 @Controller('/api/users')
 @Serialize(UserDTO)
 export class UsersController {
-  constructor(private readonly userService: UsersService) {}
+  constructor(private readonly userService: UsersService, private readonly authService: AuthService) {}
 
   @Post('/new')
   async createUser( @Body() body: CreateUserDTO ) {
 
-    const found = await this.userService.findEmail(body.staff_email)
-
-    if(found) {
-
-      throw new Error('An account already existes with this email')
-
-    }
-    const user = await this.userService.create(body)
+    const user = await this.authService.signUp(body)
 
     return user;
 
+  }
+
+  @Post('/login')
+  async login( @Body() body: UpdateProfileDTO) {
+    const user = await this.authService.signIn(body)
+
+    return user
   }
 
   @Get('/all')

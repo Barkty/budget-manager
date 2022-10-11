@@ -56,6 +56,10 @@ export class UpdateProfileDTO {
 
     @IsString()
     @IsOptional()
+    pass_word: string
+
+    @IsString()
+    @IsOptional()
     avatar: string
 
     @IsDate()

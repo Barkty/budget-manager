@@ -42,7 +42,6 @@ export class UsersService {
 
     try {
         
-      // const user = await this.repo.update(id, {avatar: updates.avatar, department: updates.department, gender: updates.gender, username: updates.username})
       const user = await this.findOne(id)
 
       Object.assign(user, updates)
@@ -51,9 +50,8 @@ export class UsersService {
 
     } catch (error) {
 
-        throw error
+      throw error
+
     }
   }
-
-
 }
