@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Param, Delete, Patch, NotFoundException } from '@nestjs/common';
-import { UsersService } from './users.service.js';
-import { CreateUserDTO, UpdateProfileDTO, UserDTO } from './dto/user.dto.js';
-import { Serialize } from '../interceptors/serialize.interceptor.js';
-import { AuthService } from './auth.service.js';
+import { UsersService } from './users.service';
+import { CreateUserDTO, UpdateProfileDTO, UserDTO } from './dto/user.dto';
+import { Serialize } from '../interceptors/serialize.interceptor';
+import { AuthService } from './auth.service';
 
 @Controller('/api/users')
 @Serialize(UserDTO)

@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common'
-import { CreateUserDTO, UpdateProfileDTO } from './dto/user.dto';
+import { CreateUserDTO, UpdateProfileDTO, UserDTO } from './dto/user.dto';
 import { UsersService } from './users.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
@@ -17,6 +17,22 @@ const scrypt = promisify(_scrypt)
 @Injectable()
 export class AuthService {
     constructor(private usersService: UsersService) {}
+
+
+    // payload = (user: UserDTO) => {
+
+    //     const token = jwt.sign(
+    //         { id: user.id, email: user.staff_email, dept: user.department },
+    //         process.env.JWT_SECRET,
+    //         {
+    //           expiresIn: "30d",
+    //           issuer: "SAHCO PLC",
+    //         }
+    //     );
+        
+    //     return { user, token: token };
+
+    // }
 
     /**
      * 
