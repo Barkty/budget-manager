@@ -8,6 +8,12 @@ export class Budget {
     id: number
 
     @Column()
+    creatorId: number
+
+    @Column()
+    accountId: number
+
+    @Column()
     department: string
     
     @Column({ type: "int" })

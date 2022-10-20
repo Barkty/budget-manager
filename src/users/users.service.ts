@@ -1,5 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/users.entity';
 import { CreateUserDTO } from './dto/user.dto';
@@ -15,6 +15,14 @@ export class UsersService {
    */
 
   create = async (body: CreateUserDTO) => {
+
+    const found = await this.findEmail(body.staff_email)
+        
+    if(found) {
+
+      throw new BadRequestException('An account already exists with this email')
+        
+    }
     const user = this.repo.create({...body})
 
     return await this.repo.save(user)
@@ -28,6 +36,11 @@ export class UsersService {
 
   findOne = async (id: number) => {
     const user = this.repo.findOneBy({id: id})
+
+    if(!user) {
+
+      throw new BadRequestException('User does not exist')
+    }
 
     return user;
   }
@@ -48,6 +61,19 @@ export class UsersService {
 
     return user;
   }
+
+  filterAll = async (staff_name: string) => {
+    try {
+        
+      const users = await this.repo.findBy({ staff_name: Like(`%${staff_name}%`) })
+
+      return users;
+
+    } catch (error) {
+
+        throw error
+    }
+}
 
   /**
    * 

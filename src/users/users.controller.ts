@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Patch, NotFoundException, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDTO, UpdateProfileDTO, UserDTO } from './dto/user.dto';
 import { Serialize } from '../interceptors/serialize.interceptor';
@@ -26,7 +26,15 @@ export class UsersController {
   }
 
   @Get('/all')
-  async getUsers() {
+  async getUsers( @Query('staff_name') staff_name: string ) {
+
+    if (staff_name) {
+
+      const users = await this.userService.filterAll(staff_name)
+
+      return users
+
+    }
     const users = await this.userService.findAll()
     
     return users
