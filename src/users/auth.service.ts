@@ -42,7 +42,6 @@ export class AuthService {
     signIn = async (user: UpdateProfileDTO) => {
         const users = await this.usersService.findEmail(user.staff_email)
 
-        console.log('Auth: ', users)
         if(!users) {
             throw new NotFoundException('User does not exist')
         }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, NotFoundException, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Patch, NotFoundException, Query, Session } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDTO, UpdateProfileDTO, UserDTO } from './dto/user.dto';
 import { Serialize } from '../interceptors/serialize.interceptor';
@@ -64,7 +64,7 @@ export class UsersController {
     return user;
   }
 
-  @Patch('/update')
+  @Patch('/update/:id')
   async updateUser( @Param('id') id: string, @Body() body: UpdateProfileDTO ) {
 
     const user = await this.userService.updateOne(Number(id), body)
